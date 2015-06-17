@@ -43,7 +43,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="userinfo"></li>
-              <li><a target="_blank" id="website">官网</a></li>
+              <li><a href="http://hytl.1723yx.com" target="_blank">官网</a></li>
               <li><a href="http://1723yx.com/UserCenter/noIndulge" target="_blank">防沉迷</a></li>
               <li><a href="http://1723yx.com/PayCenter/index" target="_blank">充值</a></li>
               <li><a href="http://1723yx.com/Service/index" target="_blank">客服</a></li>
@@ -92,7 +92,8 @@
           }else{
             roll = setInterval($.textRoll,3000);
           }
-        })
+        });
+
 
         $.getJSON("http://1723yx.com/Test/topframeinfo?jsoncallback=?",function(data){
           console.log(data);
