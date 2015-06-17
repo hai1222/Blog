@@ -46,10 +46,14 @@
               <li><a href="http://1723yx.com/UserCenter/noIndulge" target="_blank">防沉迷</a></li>
               <li><a href="http://1723yx.com/PayCenter/index" target="_blank">充值</a></li>
               <li><a href="http://1723yx.com/Service/index" target="_blank">客服</a></li>
-              <li class="dropdown">
+              <!-- <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">所有游戏 <span class="caret"></span></a>
                 <ul class="dropdown-menu gamelist" role="menu">
                 </ul>
+              </li> -->
+              <li><a>所有游戏:</a></li>
+              <li>
+                <ul class="movetext gamelist" style="padding-top:0px;"></ul>
               </li>
             </ul>
           </div><!-- /.navbar-collapse -->
@@ -62,7 +66,10 @@
       <script>
       $.textRoll = function(){
         //跑马灯效果
-        $(".movetext li:last").css({'height':'0px','opacity':'0'}).insertBefore(".movetext li:first").animate({'height':'35px','opacity':'1'},'slow',function(){$(this).removeAttr('style')});
+        $(".movetext").each(function(index){
+          $(".movetext:eq(" + index + ") li:last").css({'height':'0px','opacity':'0'}).insertBefore(".movetext:eq(" + index + ") li:first").animate({'height':'35px','opacity':'1'},'slow',function(){$(this).removeAttr('style')});
+        })
+        //$(".movetext:eq(1) li:last").css({'height':'0px','opacity':'0'}).insertBefore(".movetext:eq(1) li:first").animate({'height':'35px','opacity':'1'},'slow',function(){$(this).removeAttr('style')});
       }
       $(document).ready(function(){
         //JQ操作
