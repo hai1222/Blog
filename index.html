@@ -27,8 +27,8 @@
         <div class="container">
           <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <a class="navbar-brand" href="http://1723yx.com">
-              <img src="image/1723logo.png" alt="1723yx" height="25px;">
+            <a class="navbar-brand" href="http://1723yx.com" target="_blank" style="margin-top:-5px;">
+              <img src="image/1723logo.png" alt="1723yx" height="38px;">
             </a>
           </div>
 
@@ -43,6 +43,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="userinfo"></li>
+              <li><a target="_blank">官网</a></li>
               <li><a href="http://1723yx.com/UserCenter/noIndulge" target="_blank">防沉迷</a></li>
               <li><a href="http://1723yx.com/PayCenter/index" target="_blank">充值</a></li>
               <li><a href="http://1723yx.com/Service/index" target="_blank">客服</a></li>
@@ -74,7 +75,8 @@
       $(document).ready(function(){
         //JQ操作
         var roll = setInterval($.textRoll,3000);
-        $(".dropdown").hide();
+        var loginframe = window.parent.frames['loginframe'];
+        console.log("game:" + $(loginframe).attr('game'));
         /*$(".movetext li").hover(function(){
           //鼠标放上去，暂停动画
           clearInterval(roll);
