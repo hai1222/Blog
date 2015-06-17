@@ -27,7 +27,7 @@
         <div class="container">
           <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="http://1723yx.com">
               <img src="image/1723logo.png" alt="1723yx" height="25px;">
             </a>
           </div>
@@ -38,26 +38,18 @@
               <li style="heigth:30px;line-height:29px;"><img src="image/laba2_x28.gif" /></li>
               <li>
                 <ul class="movetext">
-                  <li>新闻1</li>
-                  <li>新闻2</li>
-                  <li>新闻3</li>
-                  <li>新闻4</li>
-                  <li>新闻5</li>
                 </ul>
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#">防沉迷</a></li>
-              <li><a href="#">注册</a></li>
+              <li class="userinfo"></li>
+              <li><a href="#">防沉迷</a></li>
               <li><a href="#">充值</a></li>
               <li><a href="#">论坛</a></li>
               <li><a href="#">客服</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">所有游戏 <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">封天战神</a></li>
-                  <li><a href="#">皓月屠龙</a></li>
-                  <li><a href="#">天书世界</a></li>
+                <ul class="dropdown-menu gamelist" role="menu">
                 </ul>
               </li>
             </ul>
@@ -76,13 +68,44 @@
       $(document).ready(function(){
         //JQ操作
         var roll = setInterval($.textRoll,3000);
-        $(".movetext li").hover(function(){
+        /*$(".movetext li").hover(function(){
           //鼠标放上去，暂停动画
           clearInterval(roll);
+          alert('aaa');
         },function(){
           //鼠标移开，开始动画
+          alert('bbb');
           roll = setInterval($.textRoll,3000);
+        });*/
+        $(document).on('mouseover mouseout','.movetext li',function(event){
+          if(event.type == 'mouseover'){
+            clearInterval(roll);
+          }else{
+            roll = setInterval($.textRoll,3000);
+          }
+        })
+
+        $.getJSON("http://1723yx.com/Test/topframeinfo?jsoncallback=?",function(data){
+          console.log(data);
+          var len = data.articles.length;
+          var addhtml = "";
+          for(var i = 0;i < len;i++){
+            addhtml += '<li><a href="http://1723yx.com/News/index?id=' + data.articles[i].aid + '" target="_blank">' + data.articles[i].title + '</a></li>';
+          }
+          $(".movetext").html(addhtml);
+          addhtml = "";
+          len = data.games.length;
+          for(i = 0;i < len;i++){
+            addhtml += "<li><a href='" + data.games[i].url + "' target='_blank'>" + data.games[i].name + "</a></li>"
+          }
+          $(".gamelist").html(addhtml);
+          if(data.login.status == 1){
+            $(".userinfo").html("<a href='http://1723yx.com/UserCenter/index' target='_blank'>账号：" + data.login.userinfo.username + "</a>");
+          }else{
+            $(".userinfo").html("");
+          }
         });
+
       });
       </script>
     </body>
