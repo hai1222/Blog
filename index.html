@@ -1,122 +1,57 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-  <title>1723yx</title>
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Mao&#39;web</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap -->
-  <link href="css/bootstrap.css" rel="stylesheet">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
 
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
-      <style>
-      body{padding-top: 30px;}
-      .container{width: 1200px;}
-      .movetext{height: 30px;overflow: hidden;padding-left: 5px;padding-top: 2px;}
-      .movetext li{list-style: none;height: 30px;line-height: 30px;}
-      </style>
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
-      <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <a class="navbar-brand" href="http://1723yx.com" target="_blank" style="margin-top:-8px;">
-              <img src="image/1723logo.png" alt="1723yx" height="36px;">
-            </a>
-          </div>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <li style="heigth:30px;line-height:29px;"><img src="image/laba2_x28.gif" /></li>
-              <li>
-                <ul class="movetext">
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li class="userinfo"></li>
-              <li><a href="http://hytl.1723yx.com" target="_blank">官网</a></li>
-              <li><a href="http://1723yx.com/UserCenter/noIndulge" target="_blank">防沉迷</a></li>
-              <li><a href="http://1723yx.com/PayCenter/index" target="_blank">充值</a></li>
-              <li><a href="http://1723yx.com/Service/index" target="_blank">客服</a></li>
-              <!-- <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">所有游戏 <span class="caret"></span></a>
-                <ul class="dropdown-menu gamelist" role="menu">
-                </ul>
-              </li> -->
-              <li><a>所有游戏:</a></li>
-              <li>
-                <ul class="movetext gamelist" style="padding-top:0px;"></ul>
-              </li>
-            </ul>
-          </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
-      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-      <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-      <!-- Include all compiled plugins (below), or include individual files as needed -->
-      <script src="js/bootstrap.js"></script>
-      <script>
-      $.textRoll = function(){
-        //跑马灯效果
-        $(".movetext").each(function(index){
-          $(".movetext:eq(" + index + ") li:last").css({'height':'0px','opacity':'0'}).insertBefore(".movetext:eq(" + index + ") li:first").animate({'height':'35px','opacity':'1'},'slow',function(){$(this).removeAttr('style')});
-        })
-        //$(".movetext:eq(1) li:last").css({'height':'0px','opacity':'0'}).insertBefore(".movetext:eq(1) li:first").animate({'height':'35px','opacity':'1'},'slow',function(){$(this).removeAttr('style')});
-      }
-      $(document).ready(function(){
-        //JQ操作
-        var roll = setInterval($.textRoll,3000);
-        //var loginframe = window.parent.frames['loginframe'];
-        //console.log("game:" + $(loginframe).attr('game'));
-        /*$(".movetext li").hover(function(){
-          //鼠标放上去，暂停动画
-          clearInterval(roll);
-          alert('aaa');
-        },function(){
-          //鼠标移开，开始动画
-          alert('bbb');
-          roll = setInterval($.textRoll,3000);
-        });*/
-        $(document).on('mouseover mouseout','.movetext li',function(event){
-          if(event.type == 'mouseover'){
-            clearInterval(roll);
-          }else{
-            roll = setInterval($.textRoll,3000);
-          }
-        });
+        <header role="banner">
+            <nav role="navigation" class="navbar navbar-static-top navbar-default">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <spn class="icon-bar"></spn>
+                            <spn class="icon-bar"></spn>
+                            <spn class="icon-bar"></spn>
+                        </button>
+                        <a href="index.html" class="navbar-brand">Project name</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <li><a href="#">Link</a></li>
+                            <li><a href="#">Link</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
 
+        <main role="main">
+            <h1>Main Heading</h1>
+            <p>Content specific to this page goes here.</p>
+        </main>
 
-        $.getJSON("http://1723yx.com/Test/topframeinfo?jsoncallback=?",function(data){
-          console.log(data);
-          var len = data.articles.length;
-          var addhtml = "";
-          for(var i = 0;i < len;i++){
-            addhtml += '<li><a href="http://1723yx.com/News/index?id=' + data.articles[i].aid + '" target="_blank">' + data.articles[i].title + '</a></li>';
-          }
-          $(".movetext").html(addhtml);
-          addhtml = "";
-          len = data.games.length;
-          for(i = 0;i < len;i++){
-            addhtml += "<li><a href='" + data.games[i].url + "' target='_blank'>" + data.games[i].name + "</a></li>"
-          }
-          $(".gamelist").html(addhtml);
-          if(data.login.status == 1){
-            $(".userinfo").html("<a href='http://1723yx.com/UserCenter/index' target='_blank'>账号：" + data.login.userinfo.username + "</a>");
-          }else{
-            $(".userinfo").html("");
-          }
-        });
+        <footer role="contentinfo">
+            <p><small>Copyright &copy; Company Name</small></p>
+        </footer>
 
-      });
-      </script>
+        <script src="js/vendor/jquery-1.11.3.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
     </body>
-    </html>
+</html>
