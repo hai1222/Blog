@@ -13,7 +13,11 @@ $(document).ready(function(){
 				'<td>' + data[i].time + '</td>' + 
 				'</tr>';
 		}
-		$('.table tbody').html("");
+		$('.table tbody').html("").html(addhtml);
 		$('.table tbody').html(addhtml);
-	})
+	});
+
+	$('.btn').click(function(){
+
+	});
 })
