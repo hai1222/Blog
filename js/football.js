@@ -28,9 +28,14 @@ $(document).ready(function(){
             '<td>' + data[i].quan + '</td>' +
             '<td>' + data[i].ban + '</td>' +
             '<td>' + data[i].time + '</td>' +
+            '<td><button class="delete">删除</button></td>' +
             '</tr>';
         }
         $('.table tbody').html("").html(addhtml);
         $('.table tbody').html(addhtml);
-    }
+    };
+
+    $(document).on('click','.delete',function(){
+        $(this).parent().parent().remove();
+    })
 })
