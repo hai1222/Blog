@@ -37,5 +37,16 @@ $(document).ready(function(){
 
     $(document).on('click','.delete',function(){
         $(this).parent().parent().remove();
+    });
+
+    $("select[name='liansai']").change(function(){
+        var liansai_name = $(this).val();
+        $('.table tbody tr').each(function(index){
+            if($(this).find('td').eq(2).html() == liansai_name){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        })
     })
 })
