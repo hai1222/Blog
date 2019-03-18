@@ -17,7 +17,7 @@
     var filteredData = [];
     var len = 0;
 
-    Papa.parse('gold.csv', {
+    Papa.parse('http://proape.cn/gold.csv', {
         download: true,
         complete: function(results) {
             len = results.data.length;
@@ -47,7 +47,9 @@
                     }
                     filteredData.unshift({
                         startDate: end[0],
-                        real: end_count + '/' + end_bull + '/' + (end_count - end_bull)
+                        real: end_count + '/' + end_bull + '/' + (end_count - end_bull),
+                        realAll: end_count,
+                        realBull: end_bull
                     });
                 }
             }
@@ -78,7 +80,8 @@
         var filterLen = filteredData.length;
         var fibKeys = Object.keys(fibObject);
         var base;
-        len = 13;
+        var leftBull;
+        var leftAll;
         if (fibObject.hasOwnProperty(len)) {
             base = fibObject[fibObject[len].next];
         } else {
@@ -92,6 +95,24 @@
         if (filterLen == 0 || len == 0) {
             return false;
         }
+        filteredData = filteredData.map(function (item) {
+            if (item.realAll < base.prev) {
+                base = fibObject[base.prev];
+            }
+            item.fib = (base.bull + base.bear) + '/' + base.bull + '/' + base.bear;
+            leftBull = base.bull - item.realBull;
+            leftAll = base.bull + base.bear - item.realAll;
+            if (leftBull > leftAll) {
+                item.bull = 1;
+            } else if (leftBull < 0) {
+                item.bull = 0;
+            } else {
+                item.bull = (leftBull / leftAll).toFixed(4);
+            }
+            item.bear = 1 - item.bull;
+            return item;
+        });
+        console.log(filteredData);
 
     }
 </script>
