@@ -12,7 +12,7 @@
 
     var drawData = [];
 
-    Papa.parse('http://proape.cn/gold.csv', {
+    Papa.parse('gold.csv', {
         download: true,
         complete: function(results) {
             var len = results.data.length;
