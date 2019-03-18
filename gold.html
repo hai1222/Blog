@@ -2,6 +2,9 @@
 <html>
 <head>
     <title></title>
+    <link href="css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/fibseq.js"></script>
+    <script type="text/javascript" src="js/tabulator.min.js"></script>
     <script src="js/vendor/jquery-1.11.3.min.js"></script>
     <script src="js/canvasjs.min.js"></script>
     <script src="js/papaparse.js"></script>
@@ -11,29 +14,45 @@
 <script type="text/javascript">
 
     var drawData = [];
+    var filteredData = [];
+    var len = 0;
 
-    Papa.parse('http://proape.cn/gold.csv', {
+    Papa.parse('gold.csv', {
         download: true,
         complete: function(results) {
-            var len = results.data.length;
+            len = results.data.length;
             if (len == 0) {
                 return false;
             }
+            var front;
             var count = 0;
             var bull = 0;
+            var end;
+            var end_count = 0;
+            var end_bull = 0;
             for (var i = 0; i < len; i++) {
-                results.data[i] = results.data[i].filter(Boolean);
-                if (results.data[i].length == 0) {
-                    continue;
+                front = results.data[i].filter(Boolean);
+                if (front.length != 0) {
+                    count += 1;
+                    if (front[1] == 1) {
+                        bull += 1;
+                    }
+                    drawData.push({x: count, y: parseFloat((bull/count * 100).toFixed(2))});
                 }
-                count += 1;
-                if (results.data[i][1] == 1) {
-                    bull += 1;
+                end = results.data[len - 1 - i].filter(Boolean);
+                if (end.length != 0) {
+                    end_count += 1;
+                    if (end[1] == 1) {
+                        end_bull += 1;
+                    }
+                    filteredData.unshift({
+                        startDate: end[0],
+                        real: end_count + '/' + end_bull + '/' + (end_count - end_bull)
+                    });
                 }
-                drawData.push({x: count, y: parseFloat((bull/count * 100).toFixed(2))});
             }
-            console.log(drawData);
             chart.render();
+            getTableData();
         }
     });
 
@@ -54,6 +73,27 @@
             dataPoints: drawData
         }]
     });
+
+    function getTableData() {
+        var filterLen = filteredData.length;
+        var fibKeys = Object.keys(fibObject);
+        var base;
+        len = 13;
+        if (fibObject.hasOwnProperty(len)) {
+            base = fibObject[fibObject[len].next];
+        } else {
+            fibKeys.forEach(function (i) {
+                if (i > len && !base) {
+                    base = fibObject[i];
+                }
+            });
+        }
+        console.log(base);
+        if (filterLen == 0 || len == 0) {
+            return false;
+        }
+
+    }
 </script>
 </body>
 </html>
