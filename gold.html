@@ -11,6 +11,7 @@
 </head>
 <body>
 <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+<div id="example-table"></div>
 <script type="text/javascript">
 
     var drawData = [];
@@ -82,6 +83,7 @@
         var base;
         var leftBull;
         var leftAll;
+        var re = /(\d*)(\.0{1,2}|(\.[1-9])0)/;
         if (fibObject.hasOwnProperty(len)) {
             base = fibObject[fibObject[len].next];
         } else {
@@ -102,17 +104,31 @@
             item.fib = (base.bull + base.bear) + '/' + base.bull + '/' + base.bear;
             leftBull = base.bull - item.realBull;
             leftAll = base.bull + base.bear - item.realAll;
-            if (leftBull > leftAll) {
-                item.bull = 1;
+            if (leftBull >= leftAll) {
+                item.bull = 100;
             } else if (leftBull < 0) {
                 item.bull = 0;
             } else {
-                item.bull = (leftBull / leftAll).toFixed(4);
+                item.bull = (100 * leftBull / leftAll).toFixed(2);
             }
-            item.bear = 1 - item.bull;
+            item.bear = (100 - item.bull).toFixed(2);
+            item.bull = String(item.bull).replace(re, '$1$3') + '%';
+            item.bear = String(item.bear).replace(re, '$1$3') + '%';
             return item;
         });
         console.log(filteredData);
+        var table = new Tabulator("#example-table", {
+            //height:205,
+            data:filteredData,
+            layout:"fitColumns",
+            columns:[
+                {title:"StartDate", field:"startDate", width:150},
+                {title:"Fib", field:"fib"},
+                {title:"Real", field:"real"},
+                {title:"Bull", field:"bull"},
+                {title:"Bear", field:"bear"}
+            ]
+        });
 
     }
 </script>
