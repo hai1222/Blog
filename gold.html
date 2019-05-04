@@ -15,6 +15,7 @@
       <li><a href='#tab1'>Tab 1</a></li>
       <li><a href='#tab2'>Tab 2</a></li>
       <li><a href='#tab3'>Tab 3</a></li>
+      <li><a href='#tab4'>Tab 4</a></li>
     </ul>
     <div id='tab1'>
         <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
@@ -24,6 +25,9 @@
     </div>
     <div id='tab3'>
         <div id="chartContainer1" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+    </div>
+    <div id='tab4'>
+        <div id="chartContainer2" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
     </div>
 <script type="text/javascript">
 
@@ -41,6 +45,16 @@
         'group2-4': [],
         'group2-5': [],
         'group2-6': [],
+    };
+    var columnData = {
+        'group1-2': {},
+        'group2-5': {},
+        'group2-6': {}
+    };
+    var columnDataArr = {
+        'group1-2': [],
+        'group2-5': [],
+        'group2-6': []
     };
     var filteredData = [];
     var len = 0;
@@ -83,10 +97,23 @@
             }
 
             var key = 1;
+            var month = '';
             $.each(models, function(k ,v){
+                month = k.substring(0, 7);
                 $.each(v, function(subk, subv) {
                     if (!houseData.hasOwnProperty(subk)) {
                         houseData[subk] = [];
+                    }
+
+                    if (columnData.hasOwnProperty(subk)) {
+                        if (columnData[subk].hasOwnProperty(month)) {
+                            columnData[subk][month]['y']  = parseFloat((0 + columnData[subk][month]['y'] + subv).toFixed(2))
+                        } else {
+                            columnData[subk][month] = {
+                                label: month,
+                                y: subv
+                            };
+                        }
                     }
 
                     var pointsLen = houseData[subk].length;
@@ -106,8 +133,15 @@
                 key++;
             });
 
+            $.each(columnData, function(k ,v) {
+                $.each(v, function(vk, vv) {
+                    columnDataArr[k].push(vv);
+                });
+            });
+
             chart.render();
             chart1.render();
+            chart2.render();
             createHouseChart();
         }
     });
@@ -217,6 +251,49 @@
                 showInLegend: true,
                 dataPoints: houseData['group2-6']
             },
+        ]
+    });
+
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        title:{
+            text: "Month Trade"
+        },  
+        axisY: {
+            title: "Golds",
+            titleFontColor: "#4F81BC",
+            lineColor: "#4F81BC",
+            labelFontColor: "#4F81BC",
+            tickColor: "#4F81BC"
+        }, 
+        toolTip: {
+            shared: true
+        },
+        legend: {
+            cursor:"pointer",
+            itemclick: toggleDataSeries
+        },
+        data: [{
+            type: "column",
+            name: "seb near 5 +- 10",
+            legendText: "group1-2",
+            showInLegend: true, 
+            dataPoints: columnDataArr['group1-2']
+        },
+        {
+            type: "column", 
+            name: "macd real +- 5",
+            legendText: "group2-5",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-5']
+        },
+        {
+            type: "column", 
+            name: "macd real +- 10",
+            legendText: "group2-6",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-6']
+        }
         ]
     });
 
