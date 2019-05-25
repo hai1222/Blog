@@ -45,15 +45,17 @@
         'group2-4': [],
         'group2-5': [],
         'group2-6': [],
+        'all': []
     };
     var columnData = {
         'group1-2': {},
+        //'group2-1': {},
         'group2-5': {},
         'group2-6': {}
     };
     var columnDataArr = {
         'group1-2': [],
-        'group2-1': [],
+        //'group2-1': [],
         'group2-5': [],
         'group2-6': []
     };
@@ -99,7 +101,9 @@
 
             var key = 1;
             var month = '';
+            var total;
             $.each(models, function(k ,v){
+                total = 0;
                 month = k.substring(0, 7);
                 $.each(v, function(subk, subv) {
                     if (!houseData.hasOwnProperty(subk)) {
@@ -130,6 +134,11 @@
                             y: parseFloat((0 + lastValue + subv).toFixed(2))
                         });
                     }
+                    total += subv;
+                });
+                houseData['all'].push({
+                    x: key,
+                    y: parseFloat((total).toFixed(2))
                 });
                 key++;
             });
@@ -252,6 +261,12 @@
                 showInLegend: true,
                 dataPoints: houseData['group2-6']
             },
+            {
+                name: 'all',
+                type: 'spline',
+                showInLegend: true,
+                dataPoints: houseData['all']
+            }
         ]
     });
 
