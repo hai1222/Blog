@@ -633,7 +633,7 @@ var models = {
         'group1-2': 0,
         'group1-3': 0,
         'group1-4': 0,
-        'group1-5': 949,6,
+        'group1-5': 949.6,
         'group1-6': 950,
         'group2-1': 0,
         'group2-2': 0,
