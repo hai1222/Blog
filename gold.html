@@ -124,20 +124,20 @@
                     var pointsLen = houseData[subk].length;
                     if (pointsLen == 0) {
                         houseData[subk].push({
-                            x: key,
+                            label: k,
                             y: subv
                         });
                     } else {
                         var lastValue = houseData[subk][pointsLen - 1].y;
                         houseData[subk].push({
-                            x: key,
+                            label: k,
                             y: parseFloat((0 + lastValue + subv).toFixed(2))
                         });
                     }
                     total += subv;
                 });
                 houseData['all'].push({
-                    x: key,
+                    label: k,
                     y: parseFloat((total).toFixed(2))
                 });
                 key++;
@@ -326,7 +326,7 @@
         var base;
         var leftBull;
         var leftAll;
-        var re = /(\d*)(\.0{1,2}|(\.[1-9])0)/;
+        var re = /(\d*)(\.0{1,2}|(\.[1-9])0)$/;
         if (fibObject.hasOwnProperty(len)) {
             base = fibObject[fibObject[len].next];
         } else {
