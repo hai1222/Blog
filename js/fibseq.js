@@ -785,8 +785,8 @@ var models = {
     '2019-06-18': {//1340 s up m down
         'group1-1': 946,//s near 5 -5 +10
         'group1-2': 948,//s near 5 -10 +10
-        'group1-3': 0,
-        'group1-4': 0,
+        'group1-3': 0,//s near 10 -5 +10
+        'group1-4': 0,//s near 10 -10 +10
         'group1-5': 952,//s real -5 +10
         'group1-6': 948,//s real -10 +10
         'group2-1': -552,//m near 5 -5 +10
