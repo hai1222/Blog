@@ -880,7 +880,21 @@ var models = {
         'group2-5': -527,
         'group2-6': -995
     },
-    '2019-06-27': {
+    '2019-06-27': {//1409 s up m down
+        'group1-1': -554,//s near 5 -5 +10
+        'group1-2': 0,
+        'group1-3': 0,
+        'group1-4': 0,
+        'group1-5': -548,//s real -5 +10
+        'group1-6': -1080,//s real -10 +10
+        'group2-1': 992,//m near 5 -5 +10
+        'group2-2': 992,//m near 5 -10 +10
+        'group2-3': 0,//m near 10 -5 +10
+        'group2-4': 0,//m near 10 -10 +10
+        'group2-5': 950,//m real -5 +10
+        'group2-6': 950//m real -10 +10 
+    },
+    '2019-06-28': {
         'group1-1': 0,
         'group1-2': 0,
         'group1-3': 0,
