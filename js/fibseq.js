@@ -950,7 +950,21 @@ var models = {
         'group2-5': -545,//m real -5 +10
         'group2-6': -1050//m real -10 +10
     },
-    '2019-07-04': {
+    '2019-07-04': {//1419 s up m down
+        'group1-1': 0,
+        'group1-2': 0,
+        'group1-3': 0,
+        'group1-4': 0,
+        'group1-5': -544,//s real -5 +10
+        'group1-6': 0,
+        'group2-1': 0,
+        'group2-2': 0,
+        'group2-3': 0,
+        'group2-4': 0,
+        'group2-5': 0,
+        'group2-6': 0
+    },
+    '2019-07-05': {
         'group1-1': 0,
         'group1-2': 0,
         'group1-3': 0,
