@@ -1034,7 +1034,21 @@ var models = {
         'group2-5': -591,//m real -5 +10
         'group2-6': -1094//m real -10 +10
     },
-    '2019-07-12': {
+    '2019-07-12': {//1404 s up m down
+        'group1-1': 0,//s near 5 -5 +10
+        'group1-2': 0,//s near 5 -10 +10
+        'group1-3': 0,//s near 10 -5 +10
+        'group1-4': 0,//s near 10 -10 +10
+        'group1-5': 962,//s real -5 +10
+        'group1-6': 962,//s real -10 +10
+        'group2-1': -538,//m near 5 -5 +10
+        'group2-2': -1065,//m near 5 -10 +10
+        'group2-3': -570,//m near 10 -5 +10
+        'group2-4': 0,
+        'group2-5': -548,//m real -5 +10
+        'group2-6': -1050 //m real -10 +10
+    },
+    '2019-07-15': {
         'group1-1': 0,
         'group1-2': 0,
         'group1-3': 0,
