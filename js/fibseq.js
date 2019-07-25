@@ -1146,21 +1146,35 @@ var models = {
         'group2-5': 956,
         'group2-6': 957
     },
-    '2019-07-24': {//1418 s up m down
-        'group1-1': 0,//s near 5 -5 +10
-        'group1-2': 0,//s near 5 -10 +10
-        'group1-3': 0,//s near 10 -5 +10
-        'group1-4': 0,//s near 10 -10 +10
-        'group1-5': 932,//s real -5 +10
-        'group1-6': 992,//s real -10 +10
-        'group2-1': -546,//m near 5 -5 +10
-        'group2-2': 0,
-        'group2-3': 0,
-        'group2-4': 0,
-        'group2-5': -555,//m real -5 +10
-        'group2-6': -1055//m real -10 +10
+    '2019-07-24': {//-957
+        'group1-1': 0,
+        'group1-2': 0,
+        'group1-3': 0,
+        'group1-4': 0,
+        'group1-5': 932,
+        'group1-6': 992,
+        'group2-1': -546,
+        'group2-2': -1064,
+        'group2-3': -566,
+        'group2-4': 965,
+        'group2-5': -555,
+        'group2-6': -1055
     },
-    '2019-07-25': {
+    '2019-07-25': {//1425.6 s up m down
+        'group1-1': -597,//s near 5 -5 +10
+        'group1-2': -1080,//s near 5 -10 +10
+        'group1-3': -565,//s near 10 -5 +10
+        'group1-4': 0,
+        'group1-5': -675,//s real -5 +10
+        'group1-6': -1050,//s real -10 +10
+        'group2-1': 1024,//m near 5 -5 +10
+        'group2-2': 1035,//m near 5 -10 +10
+        'group2-3': 0,//m near 10 -5 +10
+        'group2-4': 0,//m near 10 -10 +10
+        'group2-5': -720,//m real -5 +10
+        'group2-6': 950//m real -10 +10
+    },
+    '2019-07-26': {
         'group1-1': 0,
         'group1-2': 0,
         'group1-3': 0,
