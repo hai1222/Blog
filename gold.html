@@ -45,22 +45,43 @@
         'group2-4': [],
         'group2-5': [],
         'group2-6': [],
-        'all': []
+        'all': [],
+        'real': []
     };
     var columnData = {
+        'group1-1': {},
         'group1-2': {},
+        'group1-3': {},
+        'group1-4': {},
+        'group1-5': {},
         'group1-6': {},
+        'group2-1': {},
+        'group2-2': {},
+        'group2-3': {},
+        'group2-4': {},
         'group2-5': {},
         'group2-6': {}
     };
     var columnDataArr = {
+        'group1-1': [],
         'group1-2': [],
+        'group1-3': [],
+        'group1-4': [],
+        'group1-5': [],
         'group1-6': [],
+        'group2-1': [],
+        'group2-2': [],
+        'group2-3': [],
+        'group2-4': [],
         'group2-5': [],
         'group2-6': []
     };
+    var average = [];
     var filteredData = [];
     var len = 0;
+
+    var thisMonth = new Date();
+    thisMonth = thisMonth.getFullYear() + '-' + String(1*100 + thisMonth.getMonth() + 1).substr(1);
 
     Papa.parse('http://proape.cn/gold.csv', {
         download: true,
@@ -102,9 +123,14 @@
             var key = 1;
             var month = '';
             var total = 0;
+            var real = 0;
+            var monthsNum = 0;
+            var sumByMonth = 0;
+            var nearMonthValue = 0;
             $.each(models, function(k ,v){
                 //total = 0;
                 month = k.substring(0, 7);
+                d = k.substring(2,);
                 $.each(v, function(subk, subv) {
                     if (!houseData.hasOwnProperty(subk)) {
                         houseData[subk] = [];
@@ -112,8 +138,9 @@
 
                     if (columnData.hasOwnProperty(subk)) {
                         if (columnData[subk].hasOwnProperty(month)) {
-                            columnData[subk][month]['y']  = parseFloat((0 + columnData[subk][month]['y'] + subv).toFixed(2))
+                            columnData[subk][month]['y']  = parseFloat((0 + columnData[subk][month]['y'] + subv).toFixed(2));
                         } else {
+                            monthsNum += 1;
                             columnData[subk][month] = {
                                 label: month,
                                 y: subv
@@ -124,30 +151,69 @@
                     var pointsLen = houseData[subk].length;
                     if (pointsLen == 0) {
                         houseData[subk].push({
-                            label: k,
+                            //x: key,
+                            label: d,
                             y: subv
                         });
                     } else {
                         var lastValue = houseData[subk][pointsLen - 1].y;
                         houseData[subk].push({
-                            label: k,
+                            //x: key,
+                            label: d,
                             y: parseFloat((0 + lastValue + subv).toFixed(2))
                         });
                     }
                     total += subv;
+                    if (subk == 'group1-5' || subk == 'group1-6' || subk == 'group2-5' || subk == 'group2-6') {
+                        real += subv;
+                    }
                 });
                 houseData['all'].push({
-                    label: k,
+                    label: d,
                     y: parseFloat((total).toFixed(2))
+                });
+                houseData['real'].push({
+                    label: d,
+                    y: parseFloat((real).toFixed(2))
                 });
                 key++;
             });
 
+            monthsNum = monthsNum / 12 - 1;
+
             $.each(columnData, function(k ,v) {
+                sumByMonth = 0;
                 $.each(v, function(vk, vv) {
                     columnDataArr[k].push(vv);
+                    if (vk != thisMonth) {
+                        sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
+                    }
+                    nearMonthValue = vv.y;
+                    //sumByMonth = sumByMonth + vv;
                 });
+                average.push([k, parseFloat((sumByMonth / monthsNum).toFixed(2)), nearMonthValue]);
             });
+            var averageTotal = 0;
+            var sigema = 0;
+            var ave = 0;
+            var l = [];
+            for (var i = 0; i < 12; i++) {
+                sigema = 0;
+                averageTotal = parseFloat((0 + averageTotal + Math.abs(average[i][1])).toFixed(2));
+                console.log('check ' + (i + 1) + ':' + averageTotal);
+                ave = average[i][1];
+                l = Object.values(Object.values(columnData)[i]);
+                for (var j = 0; j < monthsNum; j++) {
+                    sigema = sigema + Math.pow(l[j].y - ave, 2);
+                }
+                sigema = Math.sqrt(sigema / monthsNum);
+                average[i].push(parseFloat(sigema.toFixed(2)));
+            }
+            average.sort(function(a, b) {
+                return Math.abs(a[1]) - Math.abs(b[1]);
+            });
+            console.log(average);
+            console.log(columnData);
 
             chart.render();
             chart1.render();
@@ -266,6 +332,12 @@
                 type: 'spline',
                 showInLegend: true,
                 dataPoints: houseData['all']
+            },
+            {
+                name: 'real',
+                type: 'spline',
+                showInLegend: true,
+                dataPoints: houseData['real']
             }
         ]
     });
@@ -289,21 +361,78 @@
             cursor:"pointer",
             itemclick: toggleDataSeries
         },
-        data: [{
+        data: [
+        /*{
+            type: "column",
+            name: "seb near 5 +5 -10",
+            legendText: "group1-1",
+            showInLegend: true, 
+            dataPoints: columnDataArr['group1-1']
+        },*/
+        {
             type: "column",
             name: "seb near 5 +- 10",
             legendText: "group1-2",
             showInLegend: true, 
             dataPoints: columnDataArr['group1-2']
         },
+        /*{
+            type: "column",
+            name: "seb near 10 +5 -10",
+            legendText: "group1-3",
+            showInLegend: true, 
+            dataPoints: columnDataArr['group1-3']
+        },
+        {
+            type: "column",
+            name: "seb near 10 +- 10",
+            legendText: "group1-4",
+            showInLegend: true, 
+            dataPoints: columnDataArr['group1-4']
+        },
+        {
+            type: "column",
+            name: "seb real -5 +10",
+            legendText: "group1-5",
+            showInLegend: true, 
+            dataPoints: columnDataArr['group1-5']
+        },*/
         {
             type: "column", 
-            name: "macd real +- 10",
+            name: "real real +- 10",
             legendText: "group1-6",
             showInLegend: true,
             dataPoints: columnDataArr['group1-6']
         },
+        /*{
+            type: "column", 
+            name: "macd near 5 -5 +10",
+            legendText: "group2-1",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-1']
+        },*/
         {
+            type: "column", 
+            name: "macd near 5 +-10",
+            legendText: "group2-2",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-2']
+        },
+        {
+            type: "column", 
+            name: "macd near 10 -5 +10",
+            legendText: "group2-3",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-3']
+        },
+        {
+            type: "column", 
+            name: "macd near 10 -10 +10",
+            legendText: "group2-4",
+            showInLegend: true,
+            dataPoints: columnDataArr['group2-4']
+        },
+        /*{
             type: "column", 
             name: "macd real +- 5",
             legendText: "group2-5",
@@ -316,7 +445,7 @@
             legendText: "group2-6",
             showInLegend: true,
             dataPoints: columnDataArr['group2-6']
-        }
+        }*/
         ]
     });
 
