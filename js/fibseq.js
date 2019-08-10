@@ -1313,5 +1313,33 @@ var models = {
         'group2-4': 994,//m near 10 -10 +10
         'group2-5': -487,//m real -5 +10
         'group2-6': 996//m real -10 +10
+    },
+    '2019-08-09': {//1506
+        'group1-1': -498,//s near 5 -5 +10
+        'group1-2': -994,//s near 5 -10 +10
+        'group1-3': -495,//s near 10 -5 +10
+        'group1-4': 0,
+        'group1-5': -507,//s real -5 +10
+        'group1-6': -1007,//s real -10 +10
+        'group2-1': -505,//m near 5 -5 +10
+        'group2-2': -1001,//m near 5 -10 +10
+        'group2-3': -515,//m near 10 -5 +10
+        'group2-4': 0,
+        'group2-5': -517,//m real -5 +10
+        'group2-6': -1009//m real -10 +10
+    },
+    '2019-08-12': {
+        'group1-1': 0,
+        'group1-2': 0,
+        'group1-3': 0,
+        'group1-4': 0,
+        'group1-5': 0,
+        'group1-6': o,
+        'group2-1': 0,
+        'group2-2': 0,
+        'group2-3': 0,
+        'group2-4': 0,
+        'group2-5': 0,
+        'group2-6': 0
     }
 };
