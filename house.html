@@ -4,22 +4,18 @@
     <title></title>
     <link href="css/tabulator.min.css" rel="stylesheet">
     <link href="css/gold.css" rel="stylesheet">
-    <script type="text/javascript" src="js/fibseq.js"></script>
-    <script type="text/javascript" src="js/tabulator.min.js"></script>
+    <link href="css/fontawesome.css" rel="stylesheet">
     <script src="js/vendor/jquery-1.11.3.min.js"></script>
     <script src="js/canvasjs.min.js"></script>
     <script src="js/papaparse.js"></script>
+    <script type="text/javascript" src="js/tabulator.min.js"></script>
 </head>
 <body>
     <ul class='tabs'>
-      <li><a href='#tab1'>Tab 1</a></li>
-      <li><a href='#tab2'>Tab 2</a></li>
-      <li><a href='#tab3'>Tab 3</a></li>
-      <li><a href='#tab4'>Tab 4</a></li>
+      <li><a href='#tab2'>Tab 1</a></li>
+      <li><a href='#tab3'>Tab 2</a></li>
+      <li><a href='#tab4'>Tab 3</a></li>
     </ul>
-    <div id='tab1'>
-        <div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
-    </div>
     <div id='tab2'>
         <div id="example-table"></div>
     </div>
@@ -31,7 +27,19 @@
     </div>
 <script type="text/javascript">
 
-    var drawData = [];
+
+    var models;
+
+    $.ajax({
+        type: "get", 
+        url: "http://120.79.255.191",
+        success: function(data) {
+            models = data.models;
+            console.log(data.models);
+            parseCsv();
+        }
+    });
+
     var houseData = {
         'group1-1': [],
         'group1-2': [],
@@ -83,163 +91,108 @@
     var thisMonth = new Date();
     thisMonth = thisMonth.getFullYear() + '-' + String(1*100 + thisMonth.getMonth() + 1).substr(1);
 
-    Papa.parse('http://proape.cn/gold.csv', {
-        download: true,
-        complete: function(results) {
-            len = results.data.length;
-            if (len == 0) {
-                return false;
-            }
-            var front;
-            var count = 0;
-            var bull = 0;
-            var end;
-            var end_count = 0;
-            var end_bull = 0;
-            for (var i = 0; i < len; i++) {
-                front = results.data[i].filter(Boolean);
-                if (front.length != 0) {
-                    count += 1;
-                    if (front[1] == 1) {
-                        bull += 1;
-                    }
-                    drawData.push({x: count, y: parseFloat((bull/count * 100).toFixed(2))});
+    var parseCsv = function() {
+        
+        var key = 1;
+        var month = '';
+        var total = 0;
+        var real = 0;
+        var monthsNum = 0;
+        var sumByMonth = 0;
+        var nearMonthValue = 0;
+        $.each(models, function(k ,v){
+            //total = 0;
+            month = k.substring(0, 7);
+            d = k.substring(2,);
+            $.each(v, function(subk, subv) {
+                if (!houseData.hasOwnProperty(subk)) {
+                    houseData[subk] = [];
                 }
-                end = results.data[len - 1 - i].filter(Boolean);
-                if (end.length != 0) {
-                    end_count += 1;
-                    if (end[1] == 1) {
-                        end_bull += 1;
+
+                if (columnData.hasOwnProperty(subk)) {
+                    if (columnData[subk].hasOwnProperty(month)) {
+                        console.log(columnData[subk][month]['y']);
+                        columnData[subk][month]['y']  = parseFloat((0 + parseFloat(columnData[subk][month]['y']) + parseFloat(subv)).toFixed(2));
+                    } else {
+                        monthsNum += 1;
+                        columnData[subk][month] = {
+                            label: month,
+                            y: subv
+                        };
                     }
-                    filteredData.unshift({
-                        startDate: end[0],
-                        real: end_count + '/' + end_bull + '/' + (end_count - end_bull),
-                        realAll: end_count,
-                        realBull: end_bull
+                }
+
+                var pointsLen = houseData[subk].length;
+                if (pointsLen == 0) {
+                    houseData[subk].push({
+                        //x: key,
+                        label: d,
+                        y: subv
+                    });
+                } else {
+                    var lastValue = parseFloat(houseData[subk][pointsLen - 1].y);
+                    houseData[subk].push({
+                        //x: key,
+                        label: d,
+                        y: parseFloat((0 + lastValue + parseFloat(subv)).toFixed(2))
                     });
                 }
-            }
-
-            var key = 1;
-            var month = '';
-            var total = 0;
-            var real = 0;
-            var monthsNum = 0;
-            var sumByMonth = 0;
-            var nearMonthValue = 0;
-            $.each(models, function(k ,v){
-                //total = 0;
-                month = k.substring(0, 7);
-                d = k.substring(2,);
-                $.each(v, function(subk, subv) {
-                    if (!houseData.hasOwnProperty(subk)) {
-                        houseData[subk] = [];
-                    }
-
-                    if (columnData.hasOwnProperty(subk)) {
-                        if (columnData[subk].hasOwnProperty(month)) {
-                            columnData[subk][month]['y']  = parseFloat((0 + columnData[subk][month]['y'] + subv).toFixed(2));
-                        } else {
-                            monthsNum += 1;
-                            columnData[subk][month] = {
-                                label: month,
-                                y: subv
-                            };
-                        }
-                    }
-
-                    var pointsLen = houseData[subk].length;
-                    if (pointsLen == 0) {
-                        houseData[subk].push({
-                            //x: key,
-                            label: d,
-                            y: subv
-                        });
-                    } else {
-                        var lastValue = houseData[subk][pointsLen - 1].y;
-                        houseData[subk].push({
-                            //x: key,
-                            label: d,
-                            y: parseFloat((0 + lastValue + subv).toFixed(2))
-                        });
-                    }
-                    total += subv;
-                    if (subk == 'group1-5' || subk == 'group1-6' || subk == 'group2-5' || subk == 'group2-6') {
-                        real += subv;
-                    }
-                });
-                houseData['all'].push({
-                    label: d,
-                    y: parseFloat((total).toFixed(2))
-                });
-                houseData['real'].push({
-                    label: d,
-                    y: parseFloat((real).toFixed(2))
-                });
-                key++;
-            });
-
-            monthsNum = monthsNum / 12 - 1;
-
-            $.each(columnData, function(k ,v) {
-                sumByMonth = 0;
-                $.each(v, function(vk, vv) {
-                    columnDataArr[k].push(vv);
-                    if (vk != thisMonth) {
-                        sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
-                    }
-                    //sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
-                    nearMonthValue = vv.y;
-                    //sumByMonth = sumByMonth + vv;
-                });
-                average.push([k, parseFloat((sumByMonth / monthsNum).toFixed(2)), nearMonthValue]);
-            });
-            var averageTotal = 0;
-            var sigema = 0;
-            var ave = 0;
-            var l = [];
-            for (var i = 0; i < 12; i++) {
-                sigema = 0;
-                averageTotal = parseFloat((0 + averageTotal + Math.abs(average[i][1])).toFixed(2));
-                console.log('check ' + (i + 1) + ':' + averageTotal);
-                ave = average[i][1];
-                l = Object.values(Object.values(columnData)[i]);
-                for (var j = 0; j < monthsNum; j++) {
-                    sigema = sigema + Math.pow(l[j].y - ave, 2);
+                total += parseFloat(subv);
+                if (subk == 'group1-5' || subk == 'group1-6' || subk == 'group2-5' || subk == 'group2-6') {
+                    real += parseFloat(subv);
                 }
-                sigema = Math.sqrt(sigema / monthsNum);
-                average[i].push(parseFloat(sigema.toFixed(2)));
-            }
-            average.sort(function(a, b) {
-                return Math.abs(a[1]) - Math.abs(b[1]);
             });
-            console.log(average);
-            console.log(columnData);
+            houseData['all'].push({
+                label: d,
+                y: parseFloat((total).toFixed(2))
+            });
+            houseData['real'].push({
+                label: d,
+                y: parseFloat((real).toFixed(2))
+            });
+            key++;
+        });
 
-            chart.render();
-            chart1.render();
-            chart2.render();
-            createHouseChart();
+        monthsNum = monthsNum / 12 - 1;
+
+        $.each(columnData, function(k ,v) {
+            sumByMonth = 0;
+            $.each(v, function(vk, vv) {
+                columnDataArr[k].push(vv);
+                if (vk != thisMonth) {
+                    sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
+                }
+                //sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
+                nearMonthValue = vv.y;
+                //sumByMonth = sumByMonth + vv;
+            });
+            average.push([k, parseFloat((sumByMonth / monthsNum).toFixed(2)), nearMonthValue]);
+        });
+        var averageTotal = 0;
+        var sigema = 0;
+        var ave = 0;
+        var l = [];
+        for (var i = 0; i < 12; i++) {
+            sigema = 0;
+            averageTotal = parseFloat((0 + averageTotal + Math.abs(average[i][1])).toFixed(2));
+            console.log('check ' + (i + 1) + ':' + averageTotal);
+            ave = average[i][1];
+            l = Object.values(Object.values(columnData)[i]);
+            for (var j = 0; j < monthsNum; j++) {
+                sigema = sigema + Math.pow(l[j].y - ave, 2);
+            }
+            sigema = Math.sqrt(sigema / monthsNum);
+            average[i].push(parseFloat(sigema.toFixed(2)));
         }
-    });
+        average.sort(function(a, b) {
+            return Math.abs(a[1]) - Math.abs(b[1]);
+        });
+        console.log(average);
+        console.log(columnData);
 
-    var chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,  
-        title:{
-            text: "Gold trade"
-        },
-        axisY: {
-            title: "Bull Rate",
-        },
-        data: [{
-            type: "spline",
-            dataPoints: drawData
-        }]
-    });
-
-
-    function createHouseChart() {
-        getTableData();
+        chart1.render();
+        chart2.render();
+        initTabs();
     }
 
     var chart1 = new CanvasJS.Chart("chartContainer1", {
@@ -450,59 +403,6 @@
         ]
     });
 
-    function getTableData() {
-        var filterLen = filteredData.length;
-        var fibKeys = Object.keys(fibObject);
-        var base;
-        var leftBull;
-        var leftAll;
-        var re = /(\d*)(\.0{1,2}|(\.[1-9])0)$/;
-        if (fibObject.hasOwnProperty(len)) {
-            base = fibObject[fibObject[len].next];
-        } else {
-            fibKeys.forEach(function (i) {
-                if (i > len && !base) {
-                    base = fibObject[i];
-                }
-            });
-        }
-        if (filterLen == 0 || len == 0) {
-            return false;
-        }
-        filteredData = filteredData.map(function (item) {
-            if (item.realAll < base.prev) {
-                base = fibObject[base.prev];
-            }
-            item.fib = (base.bull + base.bear) + '/' + base.bull + '/' + base.bear;
-            leftBull = base.bull - item.realBull;
-            leftAll = base.bull + base.bear - item.realAll;
-            if (leftBull >= leftAll) {
-                item.bull = 100;
-            } else if (leftBull < 0) {
-                item.bull = 0;
-            } else {
-                item.bull = (100 * leftBull / leftAll).toFixed(2);
-            }
-            item.bear = (100 - item.bull).toFixed(2);
-            item.bull = String(item.bull).replace(re, '$1$3') + '%';
-            item.bear = String(item.bear).replace(re, '$1$3') + '%';
-            return item;
-        });
-        var table = new Tabulator("#example-table", {
-            data:filteredData,
-            layout:"fitColumns",
-            columns:[
-                {title:"StartDate", field:"startDate", width:150},
-                {title:"Fib", field:"fib"},
-                {title:"Real", field:"real"},
-                {title:"Bull", field:"bull"},
-                {title:"Bear", field:"bear"}
-            ]
-        });
-        initTabs();
-
-    }
-
     function initTabs() {
         $('ul.tabs').each(function(){
           var $active, $content, $links = $(this).find('a');
@@ -540,6 +440,42 @@
         }
         chart1.render();
     }
+
+    var checkButton = function(cell, formatterParams, onRendered) {
+        return "<button>check</button>";
+    };
+
+    var checkClick = function(e, cell) {
+        var row = cell.getRow().getData();
+        console.log(row.id);
+        console.log(row.profit);
+        $.ajax({
+            type: "get",
+            url: "http://120.79.255.191/queren?id=" + row.id + "&profit=" + row.profit,
+            success: function(data) {
+                if (data.error == 0) {
+                    cell.getRow().delete();
+                }
+            }
+        });
+    };
+
+    $.ajax({
+        type: "get", 
+        url: "http://120.79.255.191/liebiao",
+        success: function(data) {
+            var table = new Tabulator("#example-table", {
+                data:data,
+                columns:[
+                    {title:'id', field:'id'},
+                    {title:'trade_date', field:'trade_date'},
+                    {title:'group_info', field:'group_info'},
+                    {title:'profit', field:'profit'},
+                    {title:'check', formatter:checkButton, cellClick:checkClick},
+                ]
+            });
+        }
+    });
 </script>
 </body>
 </html>

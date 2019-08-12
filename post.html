@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="css/tabulator.min.css" rel="stylesheet">
+    <link href="css/gold.css" rel="stylesheet">
+    <script type="text/javascript" src="js/fibseq.js"></script>
+    <script type="text/javascript" src="js/tabulator.min.js"></script>
+    <script src="js/vendor/jquery-1.11.3.min.js"></script>
+    <script src="js/canvasjs.min.js"></script>
+    <script src="js/papaparse.js"></script>
+</head>
+<body>
+    <div>
+        组别：<input type="text" name="groups[]">
+    </div>
+<script type="text/javascript">
+    //console.log(JSON.stringify(models));
+    $('body').html(JSON.stringify(models));
+    $.ajax({
+        type: "get", 
+        url: "http://120.79.255.191",
+        success: function(data) {
+            //console.log(data);
+        }
+    });
+</script>
+</body>
+</html>
