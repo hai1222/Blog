@@ -460,21 +460,41 @@
         });
     };
 
-    $.ajax({
-        type: "get", 
-        url: "http://120.79.255.191/liebiao",
-        success: function(data) {
-            var table = new Tabulator("#example-table", {
-                data:data,
-                columns:[
-                    {title:'id', field:'id'},
-                    {title:'trade_date', field:'trade_date'},
-                    {title:'group_info', field:'group_info'},
-                    {title:'profit', field:'profit'},
-                    {title:'check', formatter:checkButton, cellClick:checkClick},
-                ]
-            });
-        }
+    var table = new Tabulator("#example-table", {
+        data:[],
+        columns:[
+            {title:'id', field:'id', width:'20%'},
+            {title:'trade_date', field:'trade_date', width:'20%'},
+            {title:'group_info', field:'group_info', width:'20%'},
+            {title:'profit', field:'profit', editor:'input', width:'20%'},
+            {title:'check', formatter:checkButton, cellClick:checkClick, width:'20%'},
+        ],
+        footerElement:"<button id='add_day'>New Day</button>"
+    });
+
+    $.loadData = function() {
+        $.ajax({
+            type: "get",
+            url: "http://120.79.255.191/liebiao",
+            success: function(data) {
+                table.setData(data);
+            }
+        });
+    };
+    $.loadData();
+
+    $('#add_day').click(function() {
+        $.ajax({
+            type: "get",
+            url: "http://120.79.255.191/yitian",
+            success: function(data) {
+                if (data.error == 0) {
+                    $.loadData();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
     });
 </script>
 </body>
