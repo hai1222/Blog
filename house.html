@@ -111,7 +111,7 @@
 
                 if (columnData.hasOwnProperty(subk)) {
                     if (columnData[subk].hasOwnProperty(month)) {
-                        console.log(columnData[subk][month]['y']);
+                        //console.log(columnData[subk][month]['y']);
                         columnData[subk][month]['y']  = parseFloat((0 + parseFloat(columnData[subk][month]['y']) + parseFloat(subv)).toFixed(2));
                     } else {
                         monthsNum += 1;
