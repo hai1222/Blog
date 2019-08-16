@@ -94,13 +94,14 @@
         for (var i = 1; i <= 12; i++) {
         	house(0, i);
         }
+        statics();
     }
 
 
     var temparr = [];
     var target = 1000;
-    var forbidden = ['group1-1', 'group1-3', 'group1-5', 'group2-1'];
-    //var forbidden = ['group1-1', 'group1-3'];
+    //var forbidden = ['group1-1', 'group1-3', 'group1-5', 'group2-1', 'group2-5'];
+    var forbidden = [];
     var interact = [];
     var house = function(start_pos, level) {
     	//debugger;
@@ -128,7 +129,7 @@
     	var check = true;
     	$.each(monthgroup, function(m, groups) {
     		$.each(resources, function(k, g) {
-    			if (average[g][0] < 0) {
+    			if (average[g][0] < -1000) {
     				if (m == thisMonth) {
     					nowprofit += 0 - groups[g];
     				} else {
@@ -154,6 +155,28 @@
     		$('.show').html(show + '<br>' + resources + '&nbsp;&nbsp;&nbsp;&nbsp;' + nowprofit);
     		console.log(resources, 'success', nowprofit);
     	}
+    };
+
+    var statics = function() {
+        var html = $('.show').html();
+        var reg;
+        var addhtml = '';
+        var matcharr;
+        //alert(html.match(reg).length);
+        $.each(groups, function(k, g) {
+            reg = new RegExp(g, "g");
+            matcharr = html.match(reg);
+            if (matcharr) {
+                if (average[g][0] < -1000) {
+                    addhtml += '<font color="red">' + g + '</font>' + ':' + (matcharr.length) + '<br>';
+                } else {
+                    addhtml += g + ':' + (matcharr.length) + '<br>';
+                }
+            }
+        });
+        reg = new RegExp('group', "g");
+        addhtml += 'total:' + (html.match(reg).length) + '<br>';
+        $('.show').html(html + '<br>--------------------------<br>' + addhtml);
     };
 
 </script>
