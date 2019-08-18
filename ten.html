@@ -11,6 +11,7 @@
 	var groups = ['group1-1', 'group1-2', 'group1-3', 'group1-4', 'group1-5', 'group1-6', 'group2-1', 'group2-2', 'group2-3', 'group2-4', 'group2-5', 'group2-6'];
 	var thisMonth = new Date();
     thisMonth = thisMonth.getFullYear() + '-' + String(1*100 + thisMonth.getMonth() + 1).substr(1);
+    //thisMonth = '2019-08';
     var columnData = {
         'group1-1': {},
         'group1-2': {},
@@ -33,6 +34,14 @@
         success: function(data) {
             models = data.models;
             //console.log(data.models);
+            var monthstring;
+            /*for (key in models) {
+                monthstring = key.substring(0, 7);
+                if (monthstring != '2019-04' && monthstring != '2019-05' && monthstring != '2019-06' && monthstring != '2019-08') {
+                    delete models[key];
+                }
+            }*/
+            console.log(models);
             parseCsv();
         }
     });
@@ -99,10 +108,13 @@
 
 
     var temparr = [];
-    var target = prompt("Please enter your name","");
+    var target = prompt("Please enter your name",5000);
     //var forbidden = ['group1-1', 'group1-3', 'group1-5', 'group2-1', 'group2-5'];
     var forbidden = [];
     var interact = [];
+    var lastmonthtotalprofit = 0;
+    var lastmonthtotalcount = 0;
+    var nowprofittotal = 0;
     var house = function(start_pos, level) {
     	//debugger;
     	for (var i = start_pos; i < 12; i++) {
@@ -126,6 +138,7 @@
     var checkProfit = function(resources) {
     	var profit = 0;
     	var nowprofit = 0;
+        var monthprofits = [];
     	var check = true;
     	$.each(monthgroup, function(m, groups) {
     		$.each(resources, function(k, g) {
@@ -148,12 +161,17 @@
     			check = false;
     			return false;
     		}
+            monthprofits.push(profit);
     		profit = 0;
     	});
     	if (check) {
     		var show = $('.show').html();
+            monthprofits.pop()
+            lastmonthtotalprofit += monthprofits.pop();
+            lastmonthtotalcount += resources.length;
+            nowprofittotal += nowprofit;
     		$('.show').html(show + '<br>' + resources + '&nbsp;&nbsp;&nbsp;&nbsp;' + nowprofit);
-    		console.log(resources, 'success', nowprofit);
+    		console.log(resources, 'success', nowprofit, monthprofits, lastmonthtotalprofit, lastmonthtotalcount);
     	}
     };
 
@@ -175,7 +193,7 @@
             }
         });
         reg = new RegExp('group', "g");
-        addhtml += 'total:' + (html.match(reg).length) + '<br>';
+        addhtml += 'total:' + (html.match(reg).length) + '<br>last month average: ' + (lastmonthtotalprofit / lastmonthtotalcount + '<br>this month total: ' + nowprofittotal + '<br>this month average: ' + (nowprofittotal / lastmonthtotalcount));
         $('.show').html(html + '<br>--------------------------<br>' + addhtml);
     };
 
