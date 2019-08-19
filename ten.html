@@ -35,9 +35,10 @@
             models = data.models;
             //console.log(data.models);
             var monthstring;
-            /*for (key in models) {
+            /*var keeparr = ['2019-04', '2019-05', '2019-06', '2019-08'];
+            for (key in models) {
                 monthstring = key.substring(0, 7);
-                if (monthstring != '2019-04' && monthstring != '2019-05' && monthstring != '2019-06' && monthstring != '2019-08') {
+                if (keeparr.indexOf(monthstring) == -1) {
                     delete models[key];
                 }
             }*/
