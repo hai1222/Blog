@@ -201,7 +201,7 @@
         var matcharr;
         //alert(html.match(reg).length);
         $.each(groups, function(k, g) {
-            reg = new RegExp(g, "g");
+            reg = new RegExp("(<br>|,)" + g, "g");
             matcharr = html.match(reg);
             if (matcharr) {
                 if (g.indexOf('-') == 0) {
