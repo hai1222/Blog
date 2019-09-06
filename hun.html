@@ -212,6 +212,7 @@
         var reg;
         var addhtml = '';
         var matcharr;
+        var lowest = 99999;
         //alert(html.match(reg).length);
         $.each(groups, function(k, g) {
             reg = new RegExp("(<br>|,)" + g, "g");
@@ -224,8 +225,11 @@
                 }
             }
         });
+        if (nowprofittotal < lowest) {
+            lowest = nowprofittotal;
+        }
         reg = new RegExp('group', "g");
-        addhtml += 'total:' + (html.match(reg).length) + '<br>last month average: ' + (lastmonthtotalprofit / lastmonthtotalcount + '<br>this month total: ' + nowprofittotal + '<br>this month average: ' + (nowprofittotal / lastmonthtotalcount));
+        addhtml += 'total:' + (html.match(reg).length) + '<br>last month average: ' + (lastmonthtotalprofit / lastmonthtotalcount + '<br>this month total: ' + nowprofittotal + '<br>this month average: ' + (nowprofittotal / lastmonthtotalcount) + '<br>this month lowest: ' + lowest);
         $('.show').html(html + '<br>--------------------------<br>' + addhtml);
     };
 
