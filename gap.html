@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="js/vendor/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+    <div class="show"></div>
+<script type="text/javascript">
+    var models;
+    var groups = ['group1-1', '-group1-1', 'group1-2', '-group1-2', 'group1-3', '-group1-3', 'group1-4', '-group1-4', 'group1-5', '-group1-5', 'group1-6', '-group1-6', 'group2-1', '-group2-1', 'group2-2', '-group2-2', 'group2-3', '-group2-3', 'group2-4', '-group2-4', 'group2-5', '-group2-5', 'group2-6', '-group2-6'];
+    var thisMonth = new Date();
+    thisMonth = thisMonth.getFullYear() + '-' + String(1*100 + thisMonth.getMonth() + 1).substr(1);
+    //thisMonth = '2019-08';
+    var columnData = {
+        'group1-1': {},
+        'group1-2': {},
+        'group1-3': {},
+        'group1-4': {},
+        'group1-5': {},
+        'group1-6': {},
+        'group2-1': {},
+        'group2-2': {},
+        'group2-3': {},
+        'group2-4': {},
+        'group2-5': {},
+        'group2-6': {}
+    };
+    var monthgroup = {};
+    var average = {};
+    var hasThisMonth = false;
+    $.ajax({
+        type: "get", 
+        url: "http://120.79.255.191",
+        success: function(data) {
+            models = data.models;
+            //console.log(data.models);
+            var monthstring;
+            /*var keeparr = ['2019-04', '2019-05', '2019-06', '2019-08'];
+            for (key in models) {
+                monthstring = key.substring(0, 7);
+                if (keeparr.indexOf(monthstring) == -1) {
+                    delete models[key];
+                }
+            }*/
+            console.log(models);
+            parseCsv();
+        }
+    });
+
+    var parseCsv = function() {
+        
+        var key = 1;
+        var month = '';
+        var total = 0;
+        var real = 0;
+        var monthsNum = 0;
+        var sumByMonth = 0;
+        var nearMonthValue = 0;
+        $.each(models, function(k ,v){
+            //total = 0;
+            month = k.substring(0, 7);
+            d = k.substring(2,);
+            if (month == thisMonth) {
+                hasThisMonth = true;
+            }
+            $.each(v, function(subk, subv) {
+                if (columnData.hasOwnProperty(subk)) {
+                    if (columnData[subk].hasOwnProperty(month)) {
+                        //console.log(columnData[subk][month]['y']);
+                        columnData[subk][month]['y']  = parseFloat((0 + parseFloat(columnData[subk][month]['y']) + parseFloat(subv)).toFixed(2));
+                    } else {
+                        monthsNum += 1;
+                        columnData[subk][month] = {
+                            label: month,
+                            y: subv
+                        };
+                    }
+                }
+
+                total += parseFloat(subv);
+                if (subk == 'group1-5' || subk == 'group1-6' || subk == 'group2-5' || subk == 'group2-6') {
+                    real += parseFloat(subv);
+                }
+            });
+            key++;
+        });
+
+        if (hasThisMonth) {
+            monthsNum = monthsNum / 12 - 1;
+        } else {
+            monthsNum = monthsNum / 12;
+        }
+
+        $.each(columnData, function(k ,v) {
+            sumByMonth = 0;
+            $.each(v, function(vk, vv) {
+                if (vk != thisMonth) {
+                    sumByMonth = parseFloat((0 + sumByMonth + vv.y).toFixed(2));
+                }
+                nearMonthValue = vv.y;
+                if (!monthgroup.hasOwnProperty(vk)) {
+                    monthgroup[vk] = {
+                        'group1-1': 0,
+                        'group1-2': 0,
+                        'group1-3': 0,
+                        'group1-4': 0,
+                        'group1-5': 0,
+                        'group1-6': 0,
+                        'group2-1': 0,
+                        'group2-2': 0,
+                        'group2-3': 0,
+                        'group2-4': 0,
+                        'group2-5': 0,
+                        'group2-6': 0
+                    };
+                }
+                monthgroup[vk][k] = vv.y;
+            });
+            average[k] = [parseFloat((sumByMonth / monthsNum).toFixed(2)), nearMonthValue];
+        });
+        console.log(average);
+        console.log(columnData);
+        console.log(monthgroup);
+        for (var i = 1; i <= 12; i++) {
+            house(0, i);
+        }
+        //house(0,3);
+        statics();
+    }
+
+
+    var temparr = [];
+    var target = prompt("Please enter your name",10000);
+    var lastmonthtotalprofit = 0;
+    var lastmonthtotalcount = 0;
+    var nowprofittotal = 0;
+    var house = function(start_pos, level) {
+        //debugger;
+        for (var i = start_pos; i < 24; i++) {
+            if (temparr.length == 0 && groups[i].indexOf('-') == 0) continue;
+            temparr.push(groups[i]);
+            if (level > 1) {
+                if (i % 2 == 0) {
+                    house(i + 2, level - 1);
+                } else {
+                    house(i + 1, level - 1);
+                }
+            } else {
+                //console.log(temparr);
+                checkProfit(temparr);
+                temparr.pop();
+            }
+        }
+        temparr.pop();
+    };
+
+    var checkProfit = function(resources) {
+        var profit = 0;
+        var profit_max = 0;
+        var profit_min = 0;
+        var nowprofit = 0;
+        var monthprofits = [];
+        var check = true;
+        var g2;
+        var isneg;
+        var gap;
+        if (resources == ['group1-2', 'group1-4', '-group2-2', '-group2-3', 'group2-5']) {
+            debugger;
+        }
+        $.each(monthgroup, function(m, groups) {
+            $.each(resources, function(k, g) {
+                isneg = false;
+                if (g.indexOf('-') == 0) {
+                    isneg = true;
+                    g2 = g.substring(1,);
+                } else {
+                    g2 = g;
+                }
+                if (isneg) {
+                    if (m == thisMonth) {
+                        nowprofit += 0 - groups[g2];
+                    } else {
+                        profit += 0 - groups[g2];
+                    }
+                } else {
+                    if (m == thisMonth) {
+                        nowprofit += 0 + groups[g2];
+                    } else {
+                        profit += 0 + groups[g2];
+                    }
+                }
+            });
+            /*if (profit < target && m != thisMonth) {
+                //console.log(resources, 'failed', m, profit);
+                check = false;
+                return false;
+            }*/
+            if (profit != 0 && (profit > profit_max || profit_max == 0)) {
+                profit_max = profit;
+            }
+            if (profit != 0 && (profit < profit_min || profit_min == 0)) {
+                profit_min = profit;
+            }
+            monthprofits.push(profit);
+            profit = 0;
+        });
+        //debugger;
+        if (nowprofit < profit_min) {
+            gap = profit_min - nowprofit;
+        } else if (nowprofit > profit_max) {
+            gap = nowprofit - profit_max;
+        }
+        if (gap < target || (nowprofit >= profit_min && nowprofit <= profit_max)) {
+            check = false;
+            return false;
+        }
+        if (nowprofit > profit_max) {
+            checkProfit(resverse(resources));
+            return false;
+        }
+        if (check) {
+            var show = $('.show').html();
+            if (hasThisMonth) {
+                monthprofits.pop()
+            }
+            nowprofittotal += nowprofit;
+            $('.show').html(show + '<br>' + resources + '&nbsp;&nbsp;&nbsp;&nbsp;' + nowprofit);
+            console.log(resources, 'success', nowprofit, gap, profit_max, profit_min, monthprofits);
+        }
+    };
+
+    var statics = function() {
+        var html = $('.show').html();
+        var reg;
+        var addhtml = '';
+        var matcharr;
+        var lowest = 99999;
+        //alert(html.match(reg).length);
+        $.each(groups, function(k, g) {
+            reg = new RegExp("(<br>|,)" + g, "g");
+            matcharr = html.match(reg);
+            if (matcharr) {
+                if (g.indexOf('-') == 0) {
+                    addhtml += '<font color="red">' + g + '</font>' + ':' + (matcharr.length) + '<br>';
+                } else {
+                    addhtml += g + ':' + (matcharr.length) + '<br>';
+                }
+            }
+        });
+        reg = new RegExp('group', "g");
+        addhtml += 'total:' + (html.match(reg).length) + '<br>this month total: ' + nowprofittotal;
+        $('.show').html(html + '<br>--------------------------<br>' + addhtml);
+    };
+
+    var resverse = function(resources) {
+        var r = [];
+        for (var i = 0; i < resources.length; i++) {
+            if (resources[i].indexOf('-') == 0) {
+                r.push(resources[i].substr(1));
+            } else {
+                r.push('-' + resources[i]);
+            }
+        }
+        return r;
+    };
+
+</script>
+</body>
+</html>
