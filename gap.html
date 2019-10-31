@@ -140,11 +140,12 @@
         for (var i = start_pos; i < 12; i++) {
             temparr.push(groups[i]);
             if (level > 1) {
-                if (i % 2 == 0) {
+                /*if (i % 2 == 0) {
                     house(i + 2, level - 1);
                 } else {
                     house(i + 1, level - 1);
-                }
+                }*/
+                house(i + 1, level - 1);
             } else {
                 //console.log(temparr);
                 checkProfit(temparr);
