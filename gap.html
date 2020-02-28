@@ -140,11 +140,6 @@
         for (var i = start_pos; i < 12; i++) {
             temparr.push(groups[i]);
             if (level > 1) {
-                /*if (i % 2 == 0) {
-                    house(i + 2, level - 1);
-                } else {
-                    house(i + 1, level - 1);
-                }*/
                 house(i + 1, level - 1);
             } else {
                 //console.log(temparr);
@@ -213,10 +208,12 @@
         }
         if (gap < target || (nowprofit >= profit_min && nowprofit <= profit_max)) {
             check = false;
+            console.log(resources, 'failed', nowprofit, gap, profit_max, profit_min, monthprofits);
             return false;
         }
         if (nowprofit > profit_max) {
             //checkProfit(resverse(resources));
+            console.log(resources, 'failed', nowprofit, gap, profit_max, profit_min, monthprofits);
             return false;
         }
         if (check) {
