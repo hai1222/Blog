@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="js/vendor/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+    <div class="show"></div>
+<script type="text/javascript">
+    var models;
+    var groups = ['group1-1', 'group1-2', 'group1-3', 'group1-4', 'group1-5', 'group1-6', 'group2-1', 'group2-2', 'group2-3', 'group2-4', 'group2-5', 'group2-6'];
+    var columnData = {
+        'group1-1': {},
+        'group1-2': {},
+        'group1-3': {},
+        'group1-4': {},
+        'group1-5': {},
+        'group1-6': {},
+        'group2-1': {},
+        'group2-2': {},
+        'group2-3': {},
+        'group2-4': {},
+        'group2-5': {},
+        'group2-6': {}
+    };
+    var month = '';
+    var cash;
+    var initcash = 10000;
+    var base;
+    $.ajax({
+        type: "get", 
+        url: "http://120.79.255.191",
+        success: function(data) {
+            models = data.models;
+            console.log(models);
+            for (var i = 1; i <= 12; i++) {
+                house(0, i);
+            }
+            //parseCsv(["group1-3", "group1-4", "group1-5"]);
+            //parseCsv(['group1-2', 'group1-4']);//1/10
+            //parseCsv(["group1-1", "group1-2", "group1-3", "group1-4", "group1-5", "group1-6", "group2-1", "group2-5"]);//1/100
+            //parseCsv(["group1-2", "group1-3", "group1-4", "group1-6", "group2-1"]);//1/20
+        }
+    });
+
+    var temparr = [];
+    var house = function(start_pos, level) {
+        //debugger;
+        for (var i = start_pos; i < 12; i++) {
+            temparr.push(groups[i]);
+            if (level > 1) {
+                house(i + 1, level - 1);
+            } else {
+                //console.log(temparr);
+                if (parseCsv(temparr)) {
+                    console.log(temparr, 'success', cash);
+                }
+                temparr.pop();
+            }
+        }
+        temparr.pop();
+    };
+
+    var parseCsv = function(targetGroup) {
+        var tempMonth = '';
+        var quit = false;
+        var startDate = Date.parse('2019-03-01');
+        month = '';
+        $.each(models, function(k ,v){
+            if (quit) {
+                return false;
+            }
+            tempMonth = k.substring(0, 7);
+            if (Date.parse(k) < startDate) {
+                return true;
+            }
+            if (month == '') {
+                month = tempMonth;
+                cash = initcash;
+                base = 1;
+            } else if (month != tempMonth) {
+                month = tempMonth;
+                if (base < Math.floor(cash / initcash)) {
+                    base = Math.floor(cash / initcash);
+                }
+            }
+
+            $.each(targetGroup, function(subk, subv) {
+                cash = (parseFloat(cash) + parseFloat(v[subv] * base)).toFixed(2);
+                if (cash < 0) {
+                    //console.log('boom');
+                    quit = true;
+                    return false;
+                }
+            });
+            //console.log(k, cash);
+        });
+        return !quit;
+        //console.log(cash);
+    };
+
+
+/*
+["group1-2"] 0.1 base=1
+["group1-1", "group1-3"] 0.1 base=1
+["group1-1", "group1-4"] 0.1 base=1
+["group1-4", "group1-5"] 0.1 base=1
+["group1-1", "group1-4", "group2-3"] 0.1 base=1
+["group1-4", "group1-5", "group2-3"] 0.1 base=1
+*/
+
+
+</script>
+</body>
+</html>
