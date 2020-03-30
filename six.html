@@ -34,15 +34,13 @@
             models = data.models;
             console.log(models);
             var six = [
-                ["group1-2"],
-                ["group1-1", "group1-3"],
-                ["group1-1", "group1-4"],
-                ["group1-4", "group1-5"],
-                ["group1-1", "group1-4", "group2-3"],
-                ["group1-4", "group1-5", "group2-3"]
+                ["group1-3", "group1-4", "group1-6"],
+                ["group1-2", "group1-3", "group1-4", "group2-3"],
+                ["group1-2", "group1-4", "group2-1", "group2-3"],
+                ["group1-3", "group1-4", "group1-6", "group2-3"]
             ];
-            var start = Date.parse('2019-04-01');
-            for (var i = 0; i < 6; i++) {
+            var start = Date.parse('2020-03-01');
+            for (var i = 0; i < 4; i++) {
                 parseCsv(six[i], start);
                 console.log(six[i], cash, base);
             }

@@ -27,14 +27,61 @@
     var cash;
     var initcash = 10000;
     var base;
+    var grows = [];
+    var isMulti = false;
     $.ajax({
         type: "get", 
         url: "http://120.79.255.191",
         success: function(data) {
             models = data.models;
             console.log(models);
-            for (var i = 1; i <= 12; i++) {
-                house(0, i);
+            if (isMulti) {
+                if (grows.length == 0) {
+                    for (var i = 1; i <= 12; i++) {
+                        house(0, i, Date.parse('2019-04-01'));
+                    }
+                    console.log(grows);
+                }
+            }
+            var dates = [
+                '2019-05-01',
+                '2019-06-01',
+                '2019-07-01',
+                '2019-08-01',
+                '2019-09-01',
+                '2019-10-01',
+                '2019-11-01',
+                '2019-12-01',
+                '2020-01-01',
+                '2020-02-01',
+                '2020-03-01'
+            ];
+            if (!isMulti) {
+                dates.unshift('2019-04-01');
+            }
+            var oneGroup;
+            for (var i = 0; i < dates.length; i++) {
+                if (isMulti) {
+                    for (var j = 0; j < grows.length; j++) {
+                        oneGroup = grows[j];
+                        if (oneGroup.length == 0) {
+                            continue;
+                        }
+                        if (parseCsv(oneGroup, Date.parse(dates[i]))) {
+                            if (i == dates.length - 1) {
+                                $('.show').html($('.show').html() + '<p>' + oneGroup.toString() + '</p>')
+                            }
+                        } else {
+                            grows[j] = false;
+                        }
+                    }
+                    grows = grows.filter(function(v) {return v;})
+                    console.log(grows);
+                } else {
+                    test = ["group1-1"];
+                    console.log(dates[i]);
+                    parseCsv(test, Date.parse(dates[i]), true);
+                }
             }
             //parseCsv(["group1-3", "group1-4", "group1-5"]);
             //parseCsv(['group1-2', 'group1-4']);//1/10
@@ -44,7 +91,7 @@
     });
 
     var temparr = [];
-    var house = function(start_pos, level) {
+    var house = function(start_pos, level, startDate) {
         //debugger;
         for (var i = start_pos; i < 12; i++) {
             temparr.push(groups[i]);
@@ -52,8 +99,9 @@
                 house(i + 1, level - 1);
             } else {
                 //console.log(temparr);
-                if (parseCsv(temparr)) {
-                    console.log(temparr, 'success', cash);
+                if (parseCsv(temparr, startDate)) {
+                    console.log(temparr, 'success', cash, base);
+                    grows.push(temparr.slice(0));
                 }
                 temparr.pop();
             }
@@ -61,10 +109,9 @@
         temparr.pop();
     };
 
-    var parseCsv = function(targetGroup) {
+    var parseCsv = function(targetGroup, startDate, showDetail = false) {
         var tempMonth = '';
         var quit = false;
-        var startDate = Date.parse('2019-03-01');
         month = '';
         $.each(models, function(k ,v){
             if (quit) {
@@ -93,8 +140,11 @@
                     return false;
                 }
             });
-            //console.log(k, cash);
+            if (showDetail) {
+                console.log(k, cash);
+            }
         });
+        //return !quit && cash > base * initcash;
         return !quit;
         //console.log(cash);
     };
@@ -107,6 +157,12 @@
 ["group1-4", "group1-5"] 0.1 base=1
 ["group1-1", "group1-4", "group2-3"] 0.1 base=1
 ["group1-4", "group1-5", "group2-3"] 0.1 base=1
+
+monthneg.html:56 (3) ["group1-3", "group1-4", "group1-6"] "success" "844846.20"
+monthneg.html:56 (4) ["group1-2", "group1-3", "group1-4", "group2-3"] "success" "836308.93"
+monthneg.html:56 (4) ["group1-2", "group1-4", "group2-1", "group2-3"] "success" "602439.58"
+monthneg.html:56 (4) ["group1-3", "group1-4", "group1-6", "group2-3"] "success" "641454.28"
+
 */
 
 
