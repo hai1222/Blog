@@ -34,13 +34,17 @@
             models = data.models;
             console.log(models);
             var six = [
-                ["group1-3", "group1-4", "group1-6"],
-                ["group1-2", "group1-3", "group1-4", "group2-3"],
-                ["group1-2", "group1-4", "group2-1", "group2-3"],
-                ["group1-3", "group1-4", "group1-6", "group2-3"]
+                ["group1-1"], // 0.01
+                ["group1-2"], // 0.01
+                ["group1-3"], // 0.01
+                ["group1-1", "group1-3"], // 0.01
+                ["group1-3", "group1-5"], // 0.01
+                ["group1-3", "group1-6"], // 0.01
+                ["group1-3", "group2-5"], // 0.01
+                ["group1-4", "group1-5"]  // 0.01
             ];
-            var start = Date.parse('2020-03-01');
-            for (var i = 0; i < 4; i++) {
+            var start = Date.parse('2020-04-01');
+            for (var i = 0; i < 8; i++) {
                 parseCsv(six[i], start);
                 console.log(six[i], cash, base);
             }
@@ -71,6 +75,9 @@
             }
 
             $.each(targetGroup, function(subk, subv) {
+                if (!v.hasOwnProperty(subv)) {
+                    v[subv] = 0;
+                }
                 cash = (parseFloat(cash) + parseFloat(v[subv] * base)).toFixed(2);
                 if (cash < 0) {
                     console.log('boom');

@@ -28,7 +28,7 @@
     var initcash = 10000;
     var base;
     var grows = [];
-    var isMulti = false;
+    var isMulti = true;
     $.ajax({
         type: "get", 
         url: "http://120.79.255.191",
@@ -133,6 +133,9 @@
             }
 
             $.each(targetGroup, function(subk, subv) {
+                if (!v.hasOwnProperty(subv)) {
+                    v[subv] = 0;
+                }
                 cash = (parseFloat(cash) + parseFloat(v[subv] * base)).toFixed(2);
                 if (cash < 0) {
                     //console.log('boom');
