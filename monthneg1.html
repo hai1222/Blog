@@ -8,14 +8,11 @@
     <div class="show"></div>
 <script type="text/javascript">
     var models;
-    var groups = ['group1-1', 'group1-2', 'group1-3', 'group1-4', 'group1-5', 'group1-6', 'group2-1', 'group2-2', 'group2-3', 'group2-4', 'group2-5', 'group2-6'];
+    var groups = ['group1-1', 'group1-2', 'group1-3', 'group2-1', 'group2-2', 'group2-3', 'group2-4', 'group2-5', 'group2-6'];
     var columnData = {
         'group1-1': {},
         'group1-2': {},
         'group1-3': {},
-        'group1-4': {},
-        'group1-5': {},
-        'group1-6': {},
         'group2-1': {},
         'group2-2': {},
         'group2-3': {},
@@ -37,15 +34,15 @@
             console.log(models);
             if (isMulti) {
                 if (grows.length == 0) {
-                    for (var i = 1; i <= 12; i++) {
-                        house(0, i, Date.parse('2019-04-01'));
+                    for (var i = 1; i <= 9; i++) {
+                        house(0, i, Date.parse('2020-07-01'));
                     }
                     console.log(grows);
                 }
             }
-            var dates = createDates('2019-05-01');
+            var dates = createDates('2020-08-01');
             if (!isMulti) {
-                dates.unshift('2019-04-01');
+                dates.unshift('2020-07-01');
             }
             var oneGroup;
             for (var i = 0; i < dates.length; i++) {
@@ -72,17 +69,13 @@
                     parseCsv(test, Date.parse(dates[i]), true);
                 }
             }
-            //parseCsv(["group1-3", "group1-4", "group1-5"]);
-            //parseCsv(['group1-2', 'group1-4']);//1/10
-            //parseCsv(["group1-1", "group1-2", "group1-3", "group1-4", "group1-5", "group1-6", "group2-1", "group2-5"]);//1/100
-            //parseCsv(["group1-2", "group1-3", "group1-4", "group1-6", "group2-1"]);//1/20
         }
     });
 
     var temparr = [];
     var house = function(start_pos, level, startDate) {
         //debugger;
-        for (var i = start_pos; i < 12; i++) {
+        for (var i = start_pos; i < 9; i++) {
             temparr.push(groups[i]);
             if (level > 1) {
                 house(i + 1, level - 1, startDate);
@@ -163,22 +156,6 @@
         }
         return ret;
     }
-
-
-/*
-["group1-2"] 0.1 base=1
-["group1-1", "group1-3"] 0.1 base=1
-["group1-1", "group1-4"] 0.1 base=1
-["group1-4", "group1-5"] 0.1 base=1
-["group1-1", "group1-4", "group2-3"] 0.1 base=1
-["group1-4", "group1-5", "group2-3"] 0.1 base=1
-
-monthneg.html:56 (3) ["group1-3", "group1-4", "group1-6"] "success" "844846.20"
-monthneg.html:56 (4) ["group1-2", "group1-3", "group1-4", "group2-3"] "success" "836308.93"
-monthneg.html:56 (4) ["group1-2", "group1-4", "group2-1", "group2-3"] "success" "602439.58"
-monthneg.html:56 (4) ["group1-3", "group1-4", "group1-6", "group2-3"] "success" "641454.28"
-
-*/
 
 
 </script>
