@@ -35,23 +35,32 @@
             console.log(models);
             var six = [
                 ["group1-1"], // 0.01
-                ["group1-2"], // 0.01
+                ["group1-2"], // 0.02
                 ["group1-3"], // 0.01
-                ["group1-1", "group1-3"], // 0.01
-                ["group1-3", "group1-5"], // 0.01
-                ["group1-3", "group1-6"], // 0.01
-                ["group1-3", "group2-5"], // 0.01
-                ["group1-4", "group1-5"]  // 0.01
+                ["group1-1", "group1-3"] // 0.02
+            ];
+            var special = [
+                [Date.parse('2020-08-01'), 13749, 1],
+                [Date.parse('2020-08-01'), 122726, 12],
+                [Date.parse('2020-08-01'), 17913, 1],
+                [Date.parse('2020-08-01'), 21662, 2],
+                /*[Date.parse('2020-04-01'), 10000, 1],
+                [Date.parse('2020-04-01'), 10000, 1],
+                [Date.parse('2020-04-01'), 10000, 1],
+                [Date.parse('2020-04-01'), 10000, 1],*/
             ];
             var start = Date.parse('2020-04-01');
-            for (var i = 0; i < 8; i++) {
-                parseCsv(six[i], start);
+            var specialDate = Date.parse('2020-04-01');
+            var specialCash = 10000;
+            var specialBase = 1;
+            for (var i = 0; i < six.length; i++) {
+                parseCsv(six[i], special[i][0], special[i][1], special[i][2]);
                 console.log(six[i], cash, base);
             }
         }
     });
 
-    var parseCsv = function(targetGroup, startDate) {
+    var parseCsv = function(targetGroup, startDate, startCash, startBase) {
         var tempMonth = '';
         var quit = false;
         month = '';
@@ -65,8 +74,8 @@
             }
             if (month == '') {
                 month = tempMonth;
-                cash = initcash;
-                base = 1;
+                cash = startCash;
+                base = startBase;
             } else if (month != tempMonth) {
                 month = tempMonth;
                 if (base < Math.floor(cash / initcash)) {
