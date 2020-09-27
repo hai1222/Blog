@@ -35,15 +35,17 @@
             console.log(models);
             var six = [
                 ["group1-1"], // 0.01
-                ["group1-2"], // 0.02
-                ["group1-3"], // 0.01
-                ["group1-1", "group1-3"] // 0.02
+                ["group1-2"], // 0.13
+                //["group1-3"], // 0.01
+                ["group1-1", "group1-3"], // 0.02
+                ["group1-2", "group1-3", "group1-6"], // 0.01
             ];
             var special = [
-                [Date.parse('2020-08-01'), 13749, 1],
-                [Date.parse('2020-08-01'), 122726, 12],
-                [Date.parse('2020-08-01'), 17913, 1],
-                [Date.parse('2020-08-01'), 21662, 2],
+                [Date.parse('2020-08-01'), 13749, 1, 10000],
+                [Date.parse('2020-08-01'), 122726, 12, 10000], // -1000
+                //[Date.parse('2020-08-01'), 17913, 1, 10000],
+                [Date.parse('2020-08-01'), 21662, 2, 10000],
+                [Date.parse('2020-09-01'), 20000, 1, 20000], // -200
                 /*[Date.parse('2020-04-01'), 10000, 1],
                 [Date.parse('2020-04-01'), 10000, 1],
                 [Date.parse('2020-04-01'), 10000, 1],
@@ -54,16 +56,18 @@
             var specialCash = 10000;
             var specialBase = 1;
             for (var i = 0; i < six.length; i++) {
-                parseCsv(six[i], special[i][0], special[i][1], special[i][2]);
+                parseCsv(six[i], special[i][0], special[i][1], special[i][2], special[i][3]);
                 console.log(six[i], cash, base);
             }
         }
     });
 
-    var parseCsv = function(targetGroup, startDate, startCash, startBase) {
+    var parseCsv = function(targetGroup, startDate, startCash, startBase, unitCash) {
         var tempMonth = '';
         var quit = false;
         month = '';
+        cash = startCash;
+        base = startBase;
         $.each(models, function(k ,v){
             if (quit) {
                 return false;
@@ -74,12 +78,10 @@
             }
             if (month == '') {
                 month = tempMonth;
-                cash = startCash;
-                base = startBase;
             } else if (month != tempMonth) {
                 month = tempMonth;
-                if (base < Math.floor(cash / initcash)) {
-                    base = Math.floor(cash / initcash);
+                if (base < Math.floor(cash / unitCash)) {
+                    base = Math.floor(cash / unitCash);
                 }
             }
 
@@ -99,16 +101,6 @@
         return !quit;
         //console.log(cash);
     };
-
-
-/*
-["group1-2"] 0.1 base=1
-["group1-1", "group1-3"] 0.1 base=1
-["group1-1", "group1-4"] 0.1 base=1
-["group1-4", "group1-5"] 0.1 base=1
-["group1-1", "group1-4", "group2-3"] 0.1 base=1
-["group1-4", "group1-5", "group2-3"] 0.1 base=1
-*/
 
 
 </script>

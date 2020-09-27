@@ -65,7 +65,7 @@
                         }
                     }
                     grows = grows.filter(function(v) {return v;})
-                    console.log(grows);
+                    console.log(dates[i], grows);
                 } else {
                     test = ["group1-2"];
                     console.log(dates[i]);
@@ -136,6 +136,26 @@
                 console.log(k, cash);
             }
         });
+        var today = new Date();
+        var s = new Date(startDate);
+        var ydiff = today.getFullYear() - s.getFullYear();
+        var e = 0;
+        var base_min = 0;
+        if (ydiff > 0) {
+            if (today.getMonth() >= s.getMonth()) {
+                e = ydiff;
+            } else {
+                e = ydiff - 1;
+            }
+        }
+        base_min = Math.pow(2, e);
+        //console.log(s.getFullYear() + '-' + (s.getMonth() + 1), base_min);
+        if (base < base_min) {
+            return false;
+        }
+        if (showDetail) {
+            console.log(k, cash);
+        }
         //return !quit && cash > base * initcash;
         return !quit;
         //console.log(cash);
